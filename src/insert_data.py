@@ -7,6 +7,7 @@ def connect_to_db():
 
     print("Connecting to PostgreSQL database..")
     try:
+        # Had to add docker.internal for Airflow to work on local PostgresSQL
         conn = psycopg2.connect(
             host="host.docker.internal",
             port=5432,
