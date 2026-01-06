@@ -1,0 +1,15 @@
+services:
+  af:
+    container_name: airflow
+    image: apache/airflow:3.0.6
+    ports:
+      - "8080:8080"
+    environment:
+      AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@host.docker.internal:5432/airflow
+      WEATHERSTACK_API_KEY: ${WEATHERSTACK_API_KEY}
+    volumes:
+      - ./dags:/opt/airflow/dags
+      - ./src:/opt/airflow/src
+
+    command: >
+      bash -c " airflow db migrate && airflow standalone"

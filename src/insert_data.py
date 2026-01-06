@@ -8,7 +8,7 @@ def connect_to_db():
     print("Connecting to PostgreSQL database..")
     try:
         conn = psycopg2.connect(
-            host="localhost",
+            host="host.docker.internal",
             port=5432,
             dbname="weather",
             user="pipeline",
@@ -90,7 +90,17 @@ def insert_records(conn, data):
         print(f"There was a problem inserting data: {e}")    
         raise 
 
-data = mock_data()
-conn = connect_to_db()
-create_table(conn)
-insert_records(conn, data)
+def main():
+    conn = None
+    try:
+        data = mock_data()
+        conn = connect_to_db()
+        create_table(conn)
+        insert_records(conn, data)
+    except Exception as e:
+        print(f"There was an error during execution: {e}")
+    finally:
+        if conn:
+            conn.close()
+            print(f"Database connection closed.")
+
